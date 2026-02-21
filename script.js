@@ -143,9 +143,44 @@ const movies = [
             filterBtns.forEach(btn => { btn.addEventListener('click', () => { filterBtns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); state.selectedCategory = btn.dataset.category; updateFilteredMovies(); renderMovies(); renderPagination(); }); });
         }
 
-        function setupMobileMenu() {
-            const menuBtn = document.getElementById('menuBtn');
-            const mobileMenu = document.getElementById('mobileMenu');
-            menuBtn.addEventListener('click', (e) => { e.stopPropagation(); mobileMenu.classList.toggle('active'); });
-            document.addEventListener('click', (e) => { if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) { mobileMenu.classList.remove('active'); } });
+   function setupMobileMenu() {
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mobileMenu.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+            mobileMenu.classList.remove('active');
         }
+    });
+
+    const menuItems = document.querySelectorAll('.mobile-menu-item');
+    menuItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const action = item.dataset.action;
+            mobileMenu.classList.remove('active');
+
+            if (action === 'home') {
+                state.selectedCategory = 'All';
+                state.searchQuery = '';
+                document.getElementById('searchInput').value = '';
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.category === 'All');
+                });
+                updateFilteredMovies();
+                renderMovies();
+                renderPagination();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (action === 'about') {
+                alert('AskMovies - All Types of Movies Are Available Here!\n\nWe provide HD and PreDVD movies in Tamil and English.');
+            } else if (action === 'contact') {
+                window.open('https://t.me/askmovies', '_blank');
+            }
+        });
+    });
+}
