@@ -1,5 +1,5 @@
 const movies = [
-            { title: "Master", year: 2021, quality: "HD", category: ["Tamil", "Action"], image: "https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=400", telegramLink: "https://t.me/askmovies" },
+            { title: "Master", year: 2021, quality: "HD", category: ["Tamil", "Action"], image: "https://images.unsplash.com/photo-1594908900066-3f47337549d8?w=400", telegramLink: "https://askmovies.lcubots.news/?start=fs_MjE2ODA=" },
             { title: "Vikram", year: 2022, quality: "HD", category: ["Tamil", "Action"], image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400", telegramLink: "https://t.me/askmovies" },
             { title: "Beast", year: 2022, quality: "PreDvd", category: ["Tamil", "Action"], image: "https://images.unsplash.com/photo-1574267432644-f410f8ec4faf?w=400", telegramLink: "https://t.me/askmovies" },
             { title: "The Dark Knight", year: 2008, quality: "HD", category: ["English", "Action"], image: "https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=400", telegramLink: "https://t.me/askmovies" },
