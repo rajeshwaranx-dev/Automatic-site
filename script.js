@@ -93,7 +93,7 @@ function renderMovies() {
                 <div class="movie-meta">
                     <span class="movie-year">${movie.year}</span>
                     <div class="movie-categories">
-                        ${(movie.category || []).slice(0,2).map(c => `<span class="category-tag">${c}</span>`).join('')}
+                        ${(movie.category || []).map(c => `<span class="category-tag">${c}</span>`).join('')}
                     </div>
                 </div>
             </div>`;
