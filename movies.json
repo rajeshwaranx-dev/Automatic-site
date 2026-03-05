@@ -1,5 +1,19 @@
 [
   {
+    "title": "3 Roses",
+    "year": 2021,
+    "quality": "HD",
+    "category": [
+      "Telugu",
+      "HD"
+    ],
+    "type": "series",
+    "addedDate": "2026-03-05T15:56:03Z",
+    "telegramLink": "https://Askmovies.lcubots.news/?start=fs_MTY1ODc=",
+    "image": "https://raw.githubusercontent.com/rajeshwaranx-dev/Automatic-site/main/posters/3_Roses_2021.jpg",
+    "id": 65
+  },
+  {
     "title": "Constable Kanakam",
     "year": 2026,
     "quality": "HD",
