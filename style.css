@@ -184,6 +184,8 @@
         }
         .filter-btn:hover { background: linear-gradient(135deg, var(--color-grey-dark) 0%, rgba(42, 42, 42, 0.9) 100%); color: var(--color-text-primary); transform: translateY(-2px); box-shadow: var(--shadow-sm); border-color: var(--color-grey-light); }
         .filter-btn.active { background: linear-gradient(135deg, var(--color-accent-red) 0%, #c00000 100%); color: var(--color-text-primary); border-color: var(--color-accent-red); box-shadow: var(--shadow-red); }
+        .filter-btn[data-category="Today"].active { background: linear-gradient(135deg, #ff8c00, #e65c00); border-color: #ff8c00; box-shadow: 0 4px 15px rgba(255,140,0,0.4); }
+        .filter-btn[data-category="Series"].active { background: linear-gradient(135deg, #6c35de, #4a1fa8); border-color: #6c35de; box-shadow: 0 4px 15px rgba(108,53,222,0.4); }
         
         /* MOVIES GRID */
         .movies-section { margin-bottom: 60px; }
@@ -191,9 +193,10 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .movie-card { background: linear-gradient(145deg, rgba(42, 42, 42, 0.95) 0%, rgba(26, 26, 26, 0.95) 100%); border-radius: 12px; overflow: hidden; cursor: pointer; transition: all var(--transition-medium); box-shadow: var(--shadow-md); position: relative; border: 1px solid rgba(255, 255, 255, 0.05); }
         .movie-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: var(--shadow-red); border-color: var(--color-accent-red); }
-        .movie-poster-container { position: relative; width: 100%; padding-top: 150%; overflow: hidden; background-color: #111; }
-        .movie-poster { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; transition: transform var(--transition-slow); }
-        .movie-card:hover .movie-poster { transform: scale(1.05); }
+        .movie-poster-container { position: relative; width: 100%; padding-top: 150%; overflow: hidden; background-color: var(--color-grey-dark); }
+        .movie-poster { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow); }
+        .movie-card:hover .movie-poster { transform: scale(1.1); }
+        .series-badge { position: absolute; top: 12px; left: 12px; background: linear-gradient(135deg, #6c35de, #4a1fa8); color: white; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; z-index: 2; }
         .quality-badge { position: absolute; top: 12px; right: 12px; background: linear-gradient(135deg, var(--color-accent-red) 0%, #c00000 100%); color: var(--color-text-primary); padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 900; letter-spacing: 1px; box-shadow: var(--shadow-red); z-index: 2; text-transform: uppercase; border: 1px solid rgba(255, 255, 255, 0.2); }
         .movie-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 50%, transparent 100%); opacity: 0; transition: opacity var(--transition-medium); display: flex; align-items: flex-end; justify-content: center; padding: 20px; }
         .movie-card:hover .movie-overlay { opacity: 1; }
@@ -219,24 +222,10 @@
         .pagination-btn:hover:not(:disabled) { background: linear-gradient(135deg, var(--color-accent-red) 0%, #c00000 100%); color: var(--color-text-primary); border-color: var(--color-accent-red); transform: translateY(-2px); box-shadow: var(--shadow-red); }
         .pagination-btn:disabled { opacity: 0.3; cursor: not-allowed; }
         .pagination-btn svg { width: 16px; height: 16px; }
-        .pagination-numbers { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
-        .pagination-number, .page-number {
-            width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, rgba(42,42,42,0.9) 0%, rgba(26,26,26,0.9) 100%);
-            border: 2px solid var(--color-grey-dark); color: var(--color-text-secondary);
-            font-size: 15px; font-weight: 900; cursor: pointer; border-radius: 50%;
-            transition: all var(--transition-fast); font-family: 'Arial Black', Arial, sans-serif;
-        }
-        .pagination-number:hover, .page-number:hover {
-            background: linear-gradient(135deg, var(--color-grey-dark) 0%, rgba(42,42,42,0.9) 100%);
-            color: var(--color-text-primary); transform: translateY(-3px) scale(1.1);
-            border-color: var(--color-grey-light); box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        }
-        .pagination-number.active, .page-number.active {
-            background: linear-gradient(135deg, var(--color-accent-red) 0%, #c00000 100%);
-            color: var(--color-text-primary); border-color: var(--color-accent-red);
-            box-shadow: var(--shadow-red); transform: scale(1.15);
-        }
+        .pagination-numbers { display: flex; gap: 8px; }
+        .page-number { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(42, 42, 42, 0.9) 0%, rgba(26, 26, 26, 0.9) 100%); border: 2px solid var(--color-grey-dark); color: var(--color-text-secondary); font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 8px; transition: all var(--transition-fast); }
+        .page-number:hover { background: linear-gradient(135deg, var(--color-grey-dark) 0%, rgba(42, 42, 42, 0.9) 100%); color: var(--color-text-primary); transform: translateY(-2px); border-color: var(--color-grey-light); }
+        .page-number.active { background: linear-gradient(135deg, var(--color-accent-red) 0%, #c00000 100%); color: var(--color-text-primary); border-color: var(--color-accent-red); box-shadow: var(--shadow-red); }
         
         /* FOOTER - SMALLER SIZE */
         .footer {
@@ -284,7 +273,7 @@
             .filter-btn { padding: 10px 20px; font-size: 12px; }
             .search-input.active { width: 180px; padding: 0 45px 0 16px; }
             .pagination-btn { padding: 10px 16px; font-size: 12px; }
-            .pagination-number, .page-number { width: 38px; height: 38px; font-size: 13px; }
+            .page-number { width: 40px; height: 40px; font-size: 13px; }
             .tagline-text { font-size: 11px; letter-spacing: 1.5px; }
         }
         @media (max-width: 480px) {
@@ -299,5 +288,4 @@
             .category-tag { font-size: 10px; padding: 3px 10px; }
             .tagline-text { font-size: 10px; letter-spacing: 1px; }
             .telegram-btn { padding: 8px 18px; font-size: 12px; }
-}
-                        
+                           }
