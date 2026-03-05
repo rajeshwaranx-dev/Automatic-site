@@ -1,5 +1,20 @@
 [
   {
+    "title": "Spring Fever",
+    "year": 2026,
+    "quality": "HD",
+    "category": [
+      "Tamil",
+      "English",
+      "Telugu",
+      "Hindi",
+      "HD"
+    ],
+    "telegramLink": "https://t.me/askmovies",
+    "image": "https://raw.githubusercontent.com/rajeshwaranx-dev/Automatic-site/main/posters/Spring_Fever_2026.jpg",
+    "id": 60
+  },
+  {
     "title": "Beast Games",
     "year": 2025,
     "quality": "HD",
