@@ -1,5 +1,23 @@
 [
   {
+    "title": "Fallout",
+    "year": 2025,
+    "quality": "HD",
+    "category": [
+      "Tamil",
+      "English",
+      "Telugu",
+      "Hindi",
+      "Malayalam",
+      "HD"
+    ],
+    "type": "movie",
+    "addedDate": "2026-03-05T15:44:11Z",
+    "telegramLink": "https://Askmovies.lcubots.news/?start=fs_MTkxNDY=",
+    "image": "https://raw.githubusercontent.com/rajeshwaranx-dev/Automatic-site/main/posters/Fallout_2025.jpg",
+    "id": 63
+  },
+  {
     "title": "Cult",
     "year": 2026,
     "quality": "PreDvd",
