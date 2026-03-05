@@ -77,8 +77,8 @@ function renderMovies() {
         const card = document.createElement('div');
         card.className = 'movie-card';
         card.innerHTML = `
-            <div class="movie-poster">
-                <img src="${movie.image}" alt="${movie.title}" loading="lazy"
+            <div class="movie-poster-container">
+                <img class="movie-poster" src="${movie.image}" alt="${movie.title}" loading="lazy"
                      onerror="this.src='https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400'">
                 <div class="movie-overlay">
                     <a href="${movie.telegramLink}" target="_blank" rel="noopener" class="download-btn">
