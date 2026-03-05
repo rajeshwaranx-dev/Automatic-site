@@ -63,6 +63,7 @@ def parse_categories(audio_str, quality):
     if "telugu"   in a: cats.append("Telugu")
     if "hindi"    in a: cats.append("Hindi")
     if "malayalam"in a: cats.append("Malayalam")
+    if "kannada"  in a: cats.append("Kannada")
     q = quality.upper().replace("-","").replace(" ","")
     if q in ("HD","WEBDL","WEBRIP","BLURAY","BDRIP","HDRIP"): cats.append("HD")
     elif q in ("PREDVD","HDCAM","CAM","DVDSCR"): cats.append("PreDvd")
@@ -268,5 +269,5 @@ if __name__ == "__main__":
         port=port,
         url_path=webhook_path,
         webhook_url=full_webhook_url
-    )
-    
+            )
+             
