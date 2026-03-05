@@ -1,6 +1,6 @@
 const state = {
     currentPage: 1, moviesPerPage: 20,
-    selectedCategory: 'All', searchQuery: '',
+    selectedCategory: 'Today', searchQuery: '',
     filteredMovies: [], allMovies: []
 };
 
@@ -24,15 +24,34 @@ function initializeApp() {
     setupCategoryFilters(); setupPagination(); setupMobileMenu();
 }
 
+function isToday(dateStr) {
+    if (!dateStr) return false;
+    const added = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now - added;
+    const diffDays = diffMs / (1000 * 60 * 60 * 24);
+    return diffDays <= 2; // within last 2 days
+}
+
 function updateFilteredMovies() {
     let filtered = [...state.allMovies];
-    if (state.selectedCategory !== 'All') {
-        filtered = filtered.filter(m => m.category.includes(state.selectedCategory));
+    const cat = state.selectedCategory;
+
+    if (cat === 'Today') {
+        filtered = filtered.filter(m => isToday(m.addedDate));
+    } else if (cat === 'Series') {
+        filtered = filtered.filter(m => m.type === 'series');
+    } else if (cat !== 'All') {
+        filtered = filtered.filter(m =>
+            Array.isArray(m.category) && m.category.includes(cat)
+        );
     }
+
     if (state.searchQuery.trim() !== '') {
         const q = state.searchQuery.toLowerCase();
         filtered = filtered.filter(m => m.title.toLowerCase().includes(q));
     }
+
     state.filteredMovies = filtered;
     state.currentPage = 1;
 }
@@ -47,12 +66,14 @@ function renderMovies() {
     if (pageMovies.length === 0) {
         noResults.style.display = 'flex';
         grid.style.display = 'none';
+        renderPagination();
         return;
     }
     noResults.style.display = 'none';
     grid.style.display = 'grid';
 
     pageMovies.forEach(movie => {
+        const isSeries = movie.type === 'series';
         const card = document.createElement('div');
         card.className = 'movie-card';
         card.innerHTML = `
@@ -61,22 +82,24 @@ function renderMovies() {
                      onerror="this.src='https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400'">
                 <div class="movie-overlay">
                     <a href="${movie.telegramLink}" target="_blank" rel="noopener" class="watch-btn">
-                        ⬇️ Download
+                        ⬇️ ${isSeries ? 'Get Episodes' : 'Download'}
                     </a>
                 </div>
                 <div class="quality-badge">${movie.quality}</div>
+                ${isSeries ? '<div class="series-badge">📺 SERIES</div>' : ''}
             </div>
             <div class="movie-info">
                 <h3 class="movie-title">${movie.title}</h3>
                 <div class="movie-meta">
                     <span class="movie-year">${movie.year}</span>
                     <div class="movie-categories">
-                        ${movie.category.map(c => `<span class="category-tag">${c}</span>`).join('')}
+                        ${(movie.category || []).slice(0,2).map(c => `<span class="category-tag">${c}</span>`).join('')}
                     </div>
                 </div>
             </div>`;
         grid.appendChild(card);
     });
+    renderPagination();
 }
 
 function renderPagination() {
@@ -94,22 +117,24 @@ function renderPagination() {
         pageBtn.className = 'pagination-number' + (i === state.currentPage ? ' active' : '');
         pageBtn.textContent = i;
         pageBtn.addEventListener('click', () => {
-            state.currentPage = i; renderMovies(); renderPagination();
+            state.currentPage = i; renderMovies();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
         paginationNumbers.appendChild(pageBtn);
     }
-    prevBtn.disabled = state.currentPage === 1;
-    nextBtn.disabled = state.currentPage === totalPages;
+    if (prevBtn) prevBtn.disabled = state.currentPage === 1;
+    if (nextBtn) nextBtn.disabled = state.currentPage === totalPages || totalPages === 0;
 }
 
 function setupPagination() {
-    document.getElementById('prevBtn').addEventListener('click', () => {
-        if (state.currentPage > 1) { state.currentPage--; renderMovies(); renderPagination(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) prevBtn.addEventListener('click', () => {
+        if (state.currentPage > 1) { state.currentPage--; renderMovies(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
     });
-    document.getElementById('nextBtn').addEventListener('click', () => {
+    if (nextBtn) nextBtn.addEventListener('click', () => {
         const totalPages = Math.ceil(state.filteredMovies.length / state.moviesPerPage);
-        if (state.currentPage < totalPages) { state.currentPage++; renderMovies(); renderPagination(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        if (state.currentPage < totalPages) { state.currentPage++; renderMovies(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
     });
 }
 
@@ -119,7 +144,10 @@ function setupSearchToggle() {
     searchBtn.addEventListener('click', () => {
         const isActive = searchInput.classList.contains('active');
         if (isActive) {
-            if (searchInput.value.trim() !== '') { searchInput.value = ''; state.searchQuery = ''; updateFilteredMovies(); renderMovies(); renderPagination(); }
+            if (searchInput.value.trim() !== '') {
+                searchInput.value = ''; state.searchQuery = '';
+                updateFilteredMovies(); renderMovies();
+            }
             searchInput.classList.remove('active'); searchInput.blur();
         } else { searchInput.classList.add('active'); searchInput.focus(); }
     });
@@ -134,7 +162,10 @@ function setupSearchInput() {
     let searchTimeout;
     document.getElementById('searchInput').addEventListener('input', e => {
         clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => { state.searchQuery = e.target.value; updateFilteredMovies(); renderMovies(); renderPagination(); }, 300);
+        searchTimeout = setTimeout(() => {
+            state.searchQuery = e.target.value;
+            updateFilteredMovies(); renderMovies();
+        }, 300);
     });
 }
 
@@ -144,7 +175,7 @@ function setupCategoryFilters() {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             state.selectedCategory = btn.dataset.category;
-            updateFilteredMovies(); renderMovies(); renderPagination();
+            updateFilteredMovies(); renderMovies();
         });
     });
 }
@@ -152,6 +183,7 @@ function setupCategoryFilters() {
 function setupMobileMenu() {
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
+    if (!menuBtn || !mobileMenu) return;
     menuBtn.addEventListener('click', e => { e.stopPropagation(); mobileMenu.classList.toggle('active'); });
     document.addEventListener('click', e => { if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) mobileMenu.classList.remove('active'); });
     document.querySelectorAll('.mobile-menu-item').forEach(item => {
@@ -159,13 +191,13 @@ function setupMobileMenu() {
             e.preventDefault(); mobileMenu.classList.remove('active');
             const action = item.dataset.action;
             if (action === 'home') {
-                state.selectedCategory = 'All'; state.searchQuery = '';
+                state.selectedCategory = 'Today'; state.searchQuery = '';
                 document.getElementById('searchInput').value = '';
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.category === 'All'));
-                updateFilteredMovies(); renderMovies(); renderPagination();
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.category === 'Today'));
+                updateFilteredMovies(); renderMovies();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else if (action === 'about') {
-                alert('AskMovies - All Types of Movies Are Available Here!\n\nWe provide HD and PreDVD movies in Tamil and English.');
+                alert('AskMovies - All Types of Movies Are Available Here!');
             } else if (action === 'contact') {
                 window.open('https://t.me/askmovies', '_blank');
             }
