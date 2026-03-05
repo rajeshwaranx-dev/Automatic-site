@@ -1,25 +1,14 @@
-// ============================================================
-//  AskMovies — script.js  (auto-loads from movies.json)
-// ============================================================
-
 const state = {
-    currentPage: 1,
-    moviesPerPage: 20,
-    selectedCategory: 'All',
-    searchQuery: '',
-    filteredMovies: [],
-    allMovies: []
+    currentPage: 1, moviesPerPage: 20,
+    selectedCategory: 'All', searchQuery: '',
+    filteredMovies: [], allMovies: []
 };
 
-// ── Load movies from JSON then boot the app ──────────────────
 async function loadMovies() {
     try {
-        // Add cache-buster so Netlify always serves the latest JSON
         const res = await fetch('movies.json?v=' + Date.now());
-        if (!res.ok) throw new Error('Failed to fetch movies.json');
         const data = await res.json();
-        // Newest movies first (highest id = most recently added)
-        state.allMovies = data.reverse();
+        state.allMovies = data;
     } catch (err) {
         console.error('Could not load movies:', err);
         state.allMovies = [];
@@ -29,19 +18,12 @@ async function loadMovies() {
 
 document.addEventListener('DOMContentLoaded', loadMovies);
 
-// ── App init ─────────────────────────────────────────────────
 function initializeApp() {
-    updateFilteredMovies();
-    renderMovies();
-    renderPagination();
-    setupSearchToggle();
-    setupSearchInput();
-    setupCategoryFilters();
-    setupPagination();
-    setupMobileMenu();
+    updateFilteredMovies(); renderMovies(); renderPagination();
+    setupSearchToggle(); setupSearchInput();
+    setupCategoryFilters(); setupPagination(); setupMobileMenu();
 }
 
-// ── Filter logic ─────────────────────────────────────────────
 function updateFilteredMovies() {
     let filtered = [...state.allMovies];
     if (state.selectedCategory !== 'All') {
@@ -55,7 +37,6 @@ function updateFilteredMovies() {
     state.currentPage = 1;
 }
 
-// ── Render movies ────────────────────────────────────────────
 function renderMovies() {
     const grid = document.getElementById('moviesGrid');
     const noResults = document.getElementById('noResults');
@@ -63,13 +44,11 @@ function renderMovies() {
     const pageMovies = state.filteredMovies.slice(start, start + state.moviesPerPage);
 
     grid.innerHTML = '';
-
     if (pageMovies.length === 0) {
         noResults.style.display = 'flex';
         grid.style.display = 'none';
         return;
     }
-
     noResults.style.display = 'none';
     grid.style.display = 'grid';
 
@@ -81,13 +60,8 @@ function renderMovies() {
                 <img class="movie-poster" src="${movie.image}" alt="${movie.title}" loading="lazy"
                      onerror="this.src='https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400'">
                 <div class="movie-overlay">
-                    <a href="${movie.telegramLink}" target="_blank" rel="noopener" class="download-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
-                        </svg>
-                        Download
+                    <a href="${movie.telegramLink}" target="_blank" rel="noopener" class="watch-btn">
+                        ⬇️ Download
                     </a>
                 </div>
                 <div class="quality-badge">${movie.quality}</div>
@@ -105,7 +79,6 @@ function renderMovies() {
     });
 }
 
-// ── Pagination ───────────────────────────────────────────────
 function renderPagination() {
     const totalPages = Math.ceil(state.filteredMovies.length / state.moviesPerPage);
     const pagination = document.getElementById('pagination');
@@ -120,10 +93,12 @@ function renderPagination() {
         const pageBtn = document.createElement('button');
         pageBtn.className = 'pagination-number' + (i === state.currentPage ? ' active' : '');
         pageBtn.textContent = i;
-        pageBtn.addEventListener('click', () => { state.currentPage = i; renderMovies(); renderPagination(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        pageBtn.addEventListener('click', () => {
+            state.currentPage = i; renderMovies(); renderPagination();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
         paginationNumbers.appendChild(pageBtn);
     }
-
     prevBtn.disabled = state.currentPage === 1;
     nextBtn.disabled = state.currentPage === totalPages;
 }
@@ -138,7 +113,6 @@ function setupPagination() {
     });
 }
 
-// ── Search ───────────────────────────────────────────────────
 function setupSearchToggle() {
     const searchBtn = document.getElementById('searchBtn');
     const searchInput = document.getElementById('searchInput');
@@ -164,7 +138,6 @@ function setupSearchInput() {
     });
 }
 
-// ── Category filters ─────────────────────────────────────────
 function setupCategoryFilters() {
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -176,18 +149,14 @@ function setupCategoryFilters() {
     });
 }
 
-// ── Mobile menu ──────────────────────────────────────────────
 function setupMobileMenu() {
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
-
     menuBtn.addEventListener('click', e => { e.stopPropagation(); mobileMenu.classList.toggle('active'); });
     document.addEventListener('click', e => { if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) mobileMenu.classList.remove('active'); });
-
     document.querySelectorAll('.mobile-menu-item').forEach(item => {
         item.addEventListener('click', e => {
-            e.preventDefault();
-            mobileMenu.classList.remove('active');
+            e.preventDefault(); mobileMenu.classList.remove('active');
             const action = item.dataset.action;
             if (action === 'home') {
                 state.selectedCategory = 'All'; state.searchQuery = '';
@@ -202,5 +171,4 @@ function setupMobileMenu() {
             }
         });
     });
-                              }
-                                                                                                                                             
+}
