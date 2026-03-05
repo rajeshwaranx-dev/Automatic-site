@@ -1,4 +1,5 @@
 import os, re, json, base64, logging, requests
+from datetime import datetime, timezone
 from telegram import Update, MessageEntity
 from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes
 
@@ -159,11 +160,15 @@ def parse_caption(text, extra_links=None):
         if season_num:
             title = f"{title} S{season_num.group().zfill(2)}"
 
+    movie_type = "series" if "season" in fields else "movie"
+
     return {
         "title":        title,
         "year":         year,
         "quality":      qlabel,
         "category":     cats,
+        "type":         movie_type,
+        "addedDate":    datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "telegramLink": fields.get("link", "https://t.me/askmovies"),
         "image":        None
     }
@@ -243,4 +248,4 @@ if __name__ == "__main__":
         url_path=webhook_path,
         webhook_url=full_webhook_url
             )
-        
+    
