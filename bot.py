@@ -174,7 +174,7 @@ def parse_caption(text, extra_links=None):
             r'\bEP\s*\(\d+',           # EP (01-08)
             r'S\d{2}\s*EP\s*\d+',      # S02 EP06
         ]
-        caption_upper = caption.upper()
+        caption_upper = text.upper()  # text is the parameter name in parse_caption
         for pattern in series_patterns:
             if re.search(pattern, caption_upper, re.IGNORECASE):
                 is_series = True
@@ -268,5 +268,5 @@ if __name__ == "__main__":
         port=port,
         url_path=webhook_path,
         webhook_url=full_webhook_url
-            )
-        
+    )
+    
