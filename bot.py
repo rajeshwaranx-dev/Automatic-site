@@ -160,7 +160,28 @@ def parse_caption(text, extra_links=None):
         if season_num:
             title = f"{title} S{season_num.group().zfill(2)}"
 
-    movie_type = "series" if "season" in fields else "movie"
+    # Auto-detect series from Season field OR filename patterns in caption
+    is_series = False
+    if "season" in fields:
+        is_series = True
+    else:
+        # Scan caption for S01/S02/EP/Episode patterns
+        series_patterns = [
+            r'\bS\d{1,2}\b',           # S01, S02
+            r'\bSeason\s*\d+\b',       # Season 1, Season2
+            r'\bEP\s*\d+\b',           # EP01, EP 06
+            r'\bEpisode\s*\d+\b',      # Episode 1
+            r'\bEP\s*\(\d+',           # EP (01-08)
+            r'S\d{2}\s*EP\s*\d+',      # S02 EP06
+        ]
+        caption_upper = caption.upper()
+        for pattern in series_patterns:
+            if re.search(pattern, caption_upper, re.IGNORECASE):
+                is_series = True
+                log.info(f"📺 Auto-detected as series via pattern: {pattern}")
+                break
+
+    movie_type = "series" if is_series else "movie"
 
     return {
         "title":        title,
@@ -247,5 +268,5 @@ if __name__ == "__main__":
         port=port,
         url_path=webhook_path,
         webhook_url=full_webhook_url
-    )
+            )
         
