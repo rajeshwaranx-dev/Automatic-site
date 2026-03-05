@@ -1,5 +1,16 @@
 [
   {
+    "title": "Cult",
+    "year": 2026,
+    "quality": "PreDvd",
+    "category": [
+      "PreDvd"
+    ],
+    "telegramLink": "https://Askmovies.lcubots.news/?start=fs_MTk2NDY=",
+    "image": "https://raw.githubusercontent.com/rajeshwaranx-dev/Automatic-site/main/posters/Cult_2026.jpg",
+    "id": 62
+  },
+  {
     "title": "BIGG BOSS S09",
     "year": 2026,
     "quality": "HD",
