@@ -139,8 +139,8 @@ def parse_caption(text, extra_links=None):
     try:
         year = int(re.search(r'\d{4}', fields.get("year", "")).group())
     except:
-        from datetime import datetime
-        year = datetime.now().year
+        import datetime as _dt
+        year = _dt.datetime.now().year
         log.info(f"Year not found, using current year: {year}")
 
     audio   = fields.get("audio", "")
@@ -247,5 +247,5 @@ if __name__ == "__main__":
         port=port,
         url_path=webhook_path,
         webhook_url=full_webhook_url
-            )
-    
+    )
+        
