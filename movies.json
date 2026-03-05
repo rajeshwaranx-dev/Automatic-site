@@ -1,5 +1,19 @@
 [
   {
+    "title": "The Comeback",
+    "year": 2023,
+    "quality": "HD",
+    "category": [
+      "Tamil",
+      "Telugu",
+      "Hindi",
+      "HD"
+    ],
+    "telegramLink": "https://Askmovies.lcubots.news/?start=fs_MjIzNTk=",
+    "image": "https://raw.githubusercontent.com/rajeshwaranx-dev/Automatic-site/main/posters/The_Comeback_2023.jpg",
+    "id": 58
+  },
+  {
     "title": "Kannadi",
     "year": 2026,
     "quality": "HD",
