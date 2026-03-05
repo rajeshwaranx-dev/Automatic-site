@@ -222,7 +222,28 @@
         .pagination-btn:hover:not(:disabled) { background: linear-gradient(135deg, var(--color-accent-red) 0%, #c00000 100%); color: var(--color-text-primary); border-color: var(--color-accent-red); transform: translateY(-2px); box-shadow: var(--shadow-red); }
         .pagination-btn:disabled { opacity: 0.3; cursor: not-allowed; }
         .pagination-btn svg { width: 16px; height: 16px; }
-        .pagination-numbers { display: flex; gap: 8px; }
+        .pagination-numbers { display: flex; gap: 8px; flex-wrap: nowrap; justify-content: center; align-items: center; }
+        .pagination-number {
+            width: 42px; height: 42px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(42,42,42,0.9);
+            border: 2px solid #444;
+            color: #aaa;
+            font-size: 15px; font-weight: 800;
+            cursor: pointer; border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        .pagination-number:hover {
+            background: rgba(80,80,80,0.9);
+            color: #fff; border-color: #888;
+            transform: scale(1.1);
+        }
+        .pagination-number.active {
+            background: linear-gradient(135deg, #e50000, #c00000);
+            color: #fff; border-color: #e50000;
+            box-shadow: 0 0 12px rgba(229,0,0,0.5);
+            transform: scale(1.15);
+        }
         .page-number { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(42, 42, 42, 0.9) 0%, rgba(26, 26, 26, 0.9) 100%); border: 2px solid var(--color-grey-dark); color: var(--color-text-secondary); font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 8px; transition: all var(--transition-fast); }
         .page-number:hover { background: linear-gradient(135deg, var(--color-grey-dark) 0%, rgba(42, 42, 42, 0.9) 100%); color: var(--color-text-primary); transform: translateY(-2px); border-color: var(--color-grey-light); }
         .page-number.active { background: linear-gradient(135deg, var(--color-accent-red) 0%, #c00000 100%); color: var(--color-text-primary); border-color: var(--color-accent-red); box-shadow: var(--shadow-red); }
@@ -288,4 +309,5 @@
             .category-tag { font-size: 10px; padding: 3px 10px; }
             .tagline-text { font-size: 10px; letter-spacing: 1px; }
             .telegram-btn { padding: 8px 18px; font-size: 12px; }
-                           }
+                    }
+                    
