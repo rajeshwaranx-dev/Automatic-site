@@ -1,5 +1,17 @@
 [
   {
+    "title": "Kannadi",
+    "year": 2026,
+    "quality": "HD",
+    "category": [
+      "Tamil",
+      "HD"
+    ],
+    "telegramLink": "https://Askmovies.lcubots.news/?start=fs_MjIzODQ=",
+    "image": "https://raw.githubusercontent.com/rajeshwaranx-dev/Automatic-site/main/posters/Kannadi_2026.jpg",
+    "id": 56
+  },
+  {
     "title": "The SpongeBob SquarePants Movie",
     "year": 2004,
     "quality": "HD",
