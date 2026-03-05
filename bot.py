@@ -113,26 +113,34 @@ def parse_caption(text, extra_links=None):
 
     # Web series: use hyperlinks from entities if no plain URL found
     if "link" not in fields and extra_links:
-        # prefer the first file-store link
+        # prefer lcubots file-store links over t.me channel links
         for lnk in extra_links:
-            if "lcubots" in lnk or "t.me" in lnk or "start=fs_" in lnk:
+            if "lcubots" in lnk or "start=fs_" in lnk:
                 fields["link"] = lnk
                 break
+        # fallback to any t.me link if no lcubots found
+        if "link" not in fields:
+            for lnk in extra_links:
+                if "t.me" in lnk:
+                    fields["link"] = lnk
+                    break
         if "link" not in fields and extra_links:
             fields["link"] = extra_links[0]
 
     log.info(f"Parsed fields: {fields}")
 
-    for req in ["title", "year", "quality"]:
+    for req in ["title", "quality"]:
         if req not in fields:
             log.warning(f"Missing: {req}")
             return None
 
+    # Year is optional - default to current year if empty or missing
     try:
-        year = int(re.search(r'\d{4}', fields["year"]).group())
+        year = int(re.search(r'\d{4}', fields.get("year", "")).group())
     except:
-        log.warning("Could not parse year")
-        return None
+        from datetime import datetime
+        year = datetime.now().year
+        log.info(f"Year not found, using current year: {year}")
 
     audio   = fields.get("audio", "")
     quality = fields["quality"]
@@ -234,5 +242,5 @@ if __name__ == "__main__":
         port=port,
         url_path=webhook_path,
         webhook_url=full_webhook_url
-                                                        )
-    
+            )
+        
