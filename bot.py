@@ -196,21 +196,30 @@ async def handle_channel_post(update: Update, context: ContextTypes.DEFAULT_TYPE
     else:
         movie["image"] = "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400"
 
-    # Update movies.json on GitHub
-    try:
-        movies, sha = get_movies_from_github()
-    except Exception as e:
-        log.error(f"❌ Cannot fetch movies.json: {e}")
-        return
+    # Update movies.json on GitHub — retry up to 3 times on conflict
+    for attempt in range(3):
+        try:
+            movies, sha = get_movies_from_github()
+        except Exception as e:
+            log.error(f"❌ Cannot fetch movies.json: {e}")
+            return
 
-    movie["id"] = (max(m.get("id", 0) for m in movies) + 1) if movies else 1
-    movies.insert(0, movie)
+        movie["id"] = (max(m.get("id", 0) for m in movies) + 1) if movies else 1
+        # Remove duplicate if same title+year already exists
+        movies = [m for m in movies if not (m.get("title") == movie["title"] and m.get("year") == movie["year"])]
+        movies.insert(0, movie)
 
-    try:
-        save_movies_to_github(movies, sha, movie["title"])
-        log.info(f"🎬 Added '{movie['title']}' ({movie['year']}) | {movie['category']}")
-    except Exception as e:
-        log.error(f"❌ GitHub update failed: {e}")
+        try:
+            save_movies_to_github(movies, sha, movie["title"])
+            log.info(f"🎬 Added '{movie['title']}' ({movie['year']}) | {movie['category']}")
+            break  # success
+        except Exception as e:
+            if "409" in str(e) and attempt < 2:
+                log.warning(f"⚠️ SHA conflict, retrying ({attempt+1}/3)...")
+                import time; time.sleep(2)
+            else:
+                log.error(f"❌ GitHub update failed: {e}")
+                break
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
@@ -225,5 +234,5 @@ if __name__ == "__main__":
         port=port,
         url_path=webhook_path,
         webhook_url=full_webhook_url
-    )
+                                                        )
     
