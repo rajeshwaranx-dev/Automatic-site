@@ -1,5 +1,20 @@
 [
   {
+    "title": "Beast Games",
+    "year": 2025,
+    "quality": "HD",
+    "category": [
+      "Tamil",
+      "English",
+      "Telugu",
+      "Hindi",
+      "HD"
+    ],
+    "telegramLink": "https://t.me/askmovies",
+    "image": "https://raw.githubusercontent.com/rajeshwaranx-dev/Automatic-site/main/posters/Beast_Games_2025.jpg",
+    "id": 59
+  },
+  {
     "title": "The Comeback",
     "year": 2023,
     "quality": "HD",
