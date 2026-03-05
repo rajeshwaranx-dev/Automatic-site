@@ -254,10 +254,30 @@ async def handle_channel_post(update: Update, context: ContextTypes.DEFAULT_TYPE
         log.error(f"❌ GitHub update failed: {e}")
 
 
-# ── Run ───────────────────────────────────────────────────────
+# -- Health check server (required by Koyeb) ------------------
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
+
+class HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"OK")
+    def log_message(self, format, *args):
+        pass
+
+def run_health_server():
+    port = int(os.environ.get("PORT", 8000))
+    server = HTTPServer(("0.0.0.0", port), HealthHandler)
+    log.info(f"Health check server on port {port}")
+    server.serve_forever()
+
+# -- Run -------------------------------------------------------
 if __name__ == "__main__":
-    log.info("🤖 AskMovies bot starting…")
+    t = threading.Thread(target=run_health_server, daemon=True)
+    t.start()
+    log.info("AskMovies bot starting")
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(MessageHandler(filters.ALL, handle_channel_post))
     app.run_polling(allowed_updates=["channel_post", "message"])
-  
+        
