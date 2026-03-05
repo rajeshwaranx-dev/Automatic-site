@@ -223,12 +223,16 @@ async def handle_channel_post(update: Update, context: ContextTypes.DEFAULT_TYPE
         try:
             photo   = msg.photo[-1]                          # highest resolution
             tg_file = await context.bot.get_file(photo.file_id)
-            img_res = requests.get(tg_file.file_path)
+            log.info(f"Downloading poster from: {tg_file.file_path}")
+            img_res = requests.get(tg_file.file_path, timeout=30)
             img_res.raise_for_status()
+            log.info(f"Downloaded {len(img_res.content)} bytes")
 
             safe_name  = re.sub(r'[^a-zA-Z0-9_-]', '_', movie["title"])
             filename   = f"{safe_name}_{movie['year']}.jpg"
+            log.info(f"Uploading poster: {filename}")
             poster_url = upload_poster_to_github(img_res.content, filename)
+            log.info(f"Poster uploaded OK: {poster_url}")
             movie["image"] = poster_url
         except Exception as e:
             log.error(f"Could not upload poster image: {e}")
@@ -280,4 +284,4 @@ if __name__ == "__main__":
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(MessageHandler(filters.ALL, handle_channel_post))
     app.run_polling(allowed_updates=["channel_post", "message"])
-        
+    
