@@ -1,4 +1,4 @@
-# 🎬 AskMovies - Complete Website
+# 🎬 Movies - Complete Website
 
 A modern, responsive movie listing website with advanced filtering, search, and pagination features.
 
@@ -172,12 +172,12 @@ Edit in `index.html` (footer section) and `js/movies-data.js`
 
 ## 📞 Support
 
-Need help? Contact us on Telegram: https://t.me/askmovies
+Need help? Contact us on Telegram: https://t.me/Rajesh18x
 
 ## 📄 License
 
-All rights reserved © 2025 AskMovies
+All rights reserved © 2025 Movies
 
 ---
 
-**Made with ❤️ by AskMovies Team**
+**Made with ❤️ by Learning Purpose**
